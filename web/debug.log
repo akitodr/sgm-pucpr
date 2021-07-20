@@ -1,0 +1,29 @@
+[0713/142628.357:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/150817.312:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/152449.461:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/160206.126:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/161849.096:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/162504.722:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/162709.531:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/163221.074:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/163404.040:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/163603.405:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/163757.455:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/171130.519:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/203732.543:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/204655.375:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/215236.087:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/215355.690:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/223359.859:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/233712.344:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/234322.986:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0713/234534.033:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0714/143334.431:ERROR:crash_report_database_win.cc(428)] unexpected header
+[1023/141812.463:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1109/144214.306:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1112/133020.829:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1209/214942.099:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1216/125031.284:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1216/133757.717:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1216/143134.799:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\akito\AppData\Local\Google\Chrome\User Data\Crashpad\reports\0367453a-98f2-4f79-9527-db04897337e3.dmp: O arquivo já está sendo usado por outro processo. (0x20)
+[1217/101402.041:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
