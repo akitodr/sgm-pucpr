@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
-import { MdAdd, MdDeleteForever } from 'react-icons/md';
+import { MdDeleteForever } from 'react-icons/md';
 import {
   Form,
   Input,
@@ -10,6 +10,8 @@ import {
   InputNumber,
   Checkbox,
 } from 'antd';
+import { RadioChangeEvent } from 'antd/lib/radio';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import logoMonitoria from '../../assets/Logo-Monitoria.svg';
 import { Header, Container, FormContainer } from './styles';
@@ -18,8 +20,6 @@ import SchoolService from '../../services/schools.service';
 import CampusService from '../../services/campus.service';
 import CoursesService from '../../services/courses.service';
 import ProjectsService from '../../services/projects.service';
-import { RadioChangeEvent } from 'antd/lib/radio';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const FinalReportLessFormClass: React.FC = () => {
   interface Campus {
@@ -202,8 +202,7 @@ const FinalReportLessFormClass: React.FC = () => {
             >
               <Radio.Group
                 onChange={(e: RadioChangeEvent) =>
-                  setReconductionValue(e.target.value)
-                }
+                  setReconductionValue(e.target.value)}
                 value={reconductionValue}
               >
                 <Radio value={1}>Sim</Radio>
@@ -216,8 +215,7 @@ const FinalReportLessFormClass: React.FC = () => {
             <Form.Item name="period_option" rules={[{ required: true }]}>
               <Radio.Group
                 onChange={(e: RadioChangeEvent) =>
-                  setPeriodValue(e.target.value)
-                }
+                  setPeriodValue(e.target.value)}
                 value={periodValue}
               >
                 <Radio value={1}>2º Sem. 2021</Radio>
@@ -474,8 +472,7 @@ const FinalReportLessFormClass: React.FC = () => {
             <Checkbox
               checked={checkboxValue}
               onChange={(e: CheckboxChangeEvent) =>
-                setCheckboxValue(e.target.checked)
-              }
+                setCheckboxValue(e.target.checked)}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
               quam nec eros cursus euismod. Donec molestie justo ac est commodo,

@@ -132,6 +132,7 @@ const FormProject: React.FC = () => {
   useEffect(() => {
     ProjectsService.getStudents(id).then((response) => {
       setStudents(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         response.data.map((student: any) => ({
           ...student,
           name: student.student.name,

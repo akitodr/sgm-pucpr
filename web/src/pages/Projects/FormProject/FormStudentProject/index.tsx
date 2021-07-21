@@ -74,11 +74,11 @@ const FormStudentProject: React.FC = () => {
   useEffect(() => {
     ProjectStudents.show(id).then((response) => {
       const { data } = response;
-      ProjectsService.getDisciplines(data.project_id).then((response) => {
-        setDisciplines(response.data);
+      ProjectsService.getDisciplines(data.project_id).then((res) => {
+        setDisciplines(res.data);
       });
-      ProjectsService.getTeachers(data.project_id).then((response) => {
-        setTeachers(response.data);
+      ProjectsService.getTeachers(data.project_id).then((res) => {
+        setTeachers(res.data);
       });
     });
   }, []);

@@ -9,13 +9,13 @@ import {
   Checkbox,
 } from 'antd';
 import { FaEllipsisH } from 'react-icons/fa';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import logoMonitoria from '../../assets/Logo-Monitoria.svg';
 import { Header, Container, FormContainer } from './styles';
 
 import SchoolService from '../../services/schools.service';
 import ProjectsService from '../../services/projects.service';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const StudentTerm: React.FC = () => {
   interface Course {
@@ -452,8 +452,7 @@ const StudentTerm: React.FC = () => {
 
                 <Checkbox
                   onChange={(e: CheckboxChangeEvent) =>
-                    setCheboxValue(e.target.checked)
-                  }
+                    setCheboxValue(e.target.checked)}
                 >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                   ut quam nec eros cursus euismod. Donec molestie justo ac est

@@ -12,14 +12,13 @@ import {
   Col,
 } from 'antd';
 
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import logoMonitoria from '../../assets/Logo-Monitoria.svg';
 import { Header, Container, FormContainer } from './styles';
 
 import SchoolService from '../../services/schools.service';
 import CampusService from '../../services/campus.service';
 import CoursesService from '../../services/courses.service';
-import TeachersService from '../../services/teachers.service';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const NewProjectSubmissionForm: React.FC = () => {
   interface Campus {
@@ -515,8 +514,7 @@ const NewProjectSubmissionForm: React.FC = () => {
 
             <Checkbox
               onChange={(e: CheckboxChangeEvent) =>
-                setCheboxValue(e.target.checked)
-              }
+                setCheboxValue(e.target.checked)}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
               quam nec eros cursus euismod. Donec molestie justo ac est commodo,
