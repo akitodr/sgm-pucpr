@@ -135,7 +135,9 @@ const FormStudent: React.FC = () => {
             initialValues={student}
             validateMessages={validateMessages}
           >
+            {/* Form */}
             <div className="user-name">
+              {/* Status Field */}
               <Form.Item
                 name="status"
                 label="Status"
@@ -154,10 +156,12 @@ const FormStudent: React.FC = () => {
                 <Input />
               </Form.Item>
             </div>
+            {/* CPF Field */}
             <div className="user-information">
               <Form.Item name="cpf" label="CPF" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
+              {/* Birthday Field */}
               <Form.Item
                 name="birth_date"
                 label="Data de Nascimento"
@@ -169,6 +173,7 @@ const FormStudent: React.FC = () => {
                   style={{ width: '100%' }}
                 />
               </Form.Item>
+              {/* Phone Field */}
               <Form.Item
                 name="phone"
                 label="Telefone"
@@ -176,6 +181,7 @@ const FormStudent: React.FC = () => {
                 <Input />
               </Form.Item>
             </div>
+            {/* e-mail Field */}
             <div className="user-email">
               <Form.Item
                 name="email"
@@ -184,6 +190,7 @@ const FormStudent: React.FC = () => {
               >
                 <Input />
               </Form.Item>
+              {/* institutional e-mail Field */}
               <Form.Item
                 name="institutional_email"
                 label="E-mail Institucional"
@@ -193,6 +200,7 @@ const FormStudent: React.FC = () => {
               </Form.Item>
             </div>
             <div className="user-school-course">
+              {/* School selector e-mail Field */}
               <Form.Item
                 name="school_id"
                 label="Escola"
@@ -211,6 +219,7 @@ const FormStudent: React.FC = () => {
                   ))}
                 </Select>
               </Form.Item>
+              {/* Courses selector e-mail Field */}
               <Form.Item
                 name="course_id"
                 label="Curso"

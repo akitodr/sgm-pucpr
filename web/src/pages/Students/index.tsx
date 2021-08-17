@@ -18,6 +18,7 @@ import Dropzone from '../../components/Dropzone';
 
 import { TableItem, ModalContent, Container } from './styles';
 
+// Colunas da table
 const Students: React.FC = () => {
   const columns = [
     {

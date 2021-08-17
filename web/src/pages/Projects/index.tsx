@@ -16,6 +16,7 @@ import Dropzone from '../../components/Dropzone';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { Container, ModalContent, TableItem } from './styles';
 import ProjectsService from '../../services/projects.service';
+import { Footer } from '../../components/Footer';
 
 const Projects: React.FC = () => {
   const columns = [
