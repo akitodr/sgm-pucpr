@@ -7,7 +7,7 @@ import Students from './pages/Students';
 import Teachers from './pages/Teachers';
 import Projects from './pages/Projects';
 import Others from './pages/Others';
-import AppraisaProject from './pages/AppraisalProject';
+import ProjectList from './pages/ProjectList';
 import StudentTerm from './pages/StudentTerm';
 import FormStudent from './pages/Students/FormStudent';
 import FormTeacher from './pages/Teachers/FormTeacher';
@@ -34,7 +34,7 @@ const Routes = () => {
       <Route component={FormTeacher} path="/teachers/new" />
       <Route component={FormTeacher} path="/teachers/:id/edit" />
       <Route component={Others} path="/others" />
-      <Route component={AppraisaProject} path="/appraisa-project" exact />
+      <Route component={ProjectList} path="/projects/list" />
       <Route component={StudentTerm} path="/terms-of-service" />
       <Route component={NewProjectSubmission} path="/new-project-submission" />
       <Route component={FinalReportLessForm} path="/final-report-less-form" exact />

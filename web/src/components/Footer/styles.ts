@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 export const FooterClass = styled.div`
-.FooterClass{
-    padding: 15px;
-    background-color: rgba(56, 159, 217, 0.9);
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    transition: filter 0.3s;
-}
+    .FooterClass{
+        padding: 15px;
+        background-color: rgba(56, 159, 217, 0.9);
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        transition: filter 0.3s;
+    }
     Button{
         float: right;
         margin: 0;
