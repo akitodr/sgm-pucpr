@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
 import { MdAdd, MdDeleteForever } from 'react-icons/md';
 import {
@@ -10,6 +10,7 @@ import {
   Checkbox,
   Row,
   Col,
+  Table,
 } from 'antd';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -19,6 +20,7 @@ import { Header, Container, FormContainer } from './styles';
 import SchoolService from '../../services/schools.service';
 import CampusService from '../../services/campus.service';
 import CoursesService from '../../services/courses.service';
+
 
 const NewProjectSubmissionForm: React.FC = () => {
   interface Campus {
@@ -43,9 +45,17 @@ const NewProjectSubmissionForm: React.FC = () => {
     name: string;
   }
 
+  type TableLine = {
+    key: number;
+    challenges: Array<ReactNode>;
+    activities: Array<ReactNode>;
+    strategies: Array<ReactNode>;
+  };
   const [form] = Form.useForm();
   const { Option } = Select;
   const { TextArea } = Input;
+
+  
 
   const [campuses, setCampuses] = useState<Campus[]>();
   const [schools, setSchools] = useState<School[]>();
@@ -53,12 +63,26 @@ const NewProjectSubmissionForm: React.FC = () => {
   const [allCourses, setAllCourses] = useState<Course[]>();
   const [showTeacherForm, setShowTeacherForm] = useState<boolean>(false);
   const [showDisciplineForm, setShowDisciplineForm] = useState<boolean>(false);
+  const [stateChallenge, setChallangeState] = useState<boolean>(false);
+  const [stateStrategy, setStrategyState] = useState<boolean>(false);
+  const [stateActivity, setActivityState] = useState<boolean>(false);
   const [chClass, setChClass] = useState<number>(0);
   const [chExtraClass, setChExtraClass] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
   const [checkboxValue, setCheboxValue] = useState<boolean>(false);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [line, setLine] = useState<TableLine>();
+  // challenge states
+  const [challenge, setChallenge] = useState<string>('');
+  const [challageArray, setChallageArray] = useState<string[]>([]);
+  // Activities states
+  const [activities, setActivities] = useState<string>('');
+  const [activitiesArray, setActivitiesArray] = useState<string[]>([]);
+  // strategies states
+  const [strategies, setStrategies] = useState<string>('');
+  const [strategiesArray, setStrategiesArray] = useState<string[]>([]);
 
+  const [valuesTable, setTableValue] = useState<TableLine[]>([]);
   const validateMessages = {
     required: 'Campo Obrigatório',
     types: {
@@ -67,6 +91,23 @@ const NewProjectSubmissionForm: React.FC = () => {
     },
   };
 
+  const columnsStrategies = [
+    {
+      title: 'Desafios de Aprendizagem a serem enfrentados',
+      dataIndex: 'challenges',
+      key: 'challenges'
+    },
+    {
+      title: 'Correspondentes atividades da monitoria',
+      dataIndex: 'activities',
+      key: 'activities'
+    },
+    {
+      title: 'Estratégia para alcançar os estudantes',
+      dataIndex: 'strategies',
+      key: 'strategies'
+    }
+  ];
   useEffect(() => {
     CampusService.get().then((response) => {
       setCampuses(response.data);
@@ -91,6 +132,36 @@ const NewProjectSubmissionForm: React.FC = () => {
       if (response.data.length)
         form.setFieldsValue({ course_id: response.data[0].id });
     });
+  }
+
+  function insertLine(input: string, id: string) {
+    switch (id) {
+      case 'challenge':
+        setChallenge(input);
+        return ((input === '') ? setChallangeState(false) : setChallangeState(true));
+      case 'activity':
+        setActivities(input);
+        return ((input === '') ? setActivityState(false) : setActivityState(true));
+      case 'strategy':
+        setStrategies(input);
+        return ((input === '') ? setStrategyState(false) : setStrategyState(true));
+      default:
+        return (null);
+    }
+  }
+
+  function addToScreen(id: number){
+    switch (id){
+      case 1:
+        return (setChallageArray([...challageArray, challenge]));
+      case 2:
+        return (setActivitiesArray([...activitiesArray, activities]));
+      case 3:
+        return (setStrategiesArray([...strategiesArray, strategies]));
+      default:
+        return (null);
+    }
+    
   }
 
   return (
@@ -430,6 +501,7 @@ const NewProjectSubmissionForm: React.FC = () => {
             <p>
               <span>3.ESTRATÉGIAS E ATIVIDADES:</span>
             </p>
+            
             <p>
               Quadro{' '}
               <span
@@ -445,7 +517,7 @@ const NewProjectSubmissionForm: React.FC = () => {
               explicitar quais as estratégias que se pretende usar para alcançar
               os estudantes com as ações de monitoria.
             </p>
-
+            {/*
             <Row justify="space-between" align="middle">
               <Col span={7}>
                 <Form.Item
@@ -505,7 +577,125 @@ const NewProjectSubmissionForm: React.FC = () => {
                 </Form.Item>
               </Col>
             </Row>
-
+              */}
+            <small>Tabela definitiva</small>
+            <Table
+              dataSource={valuesTable}
+              columns={columnsStrategies} 
+              pagination={false} 
+            />
+            <Row>
+              <Col span={8}>
+                <span>
+                  Desafios de aprendizagem a serem enfrentados
+                </span>
+                <TextArea 
+                  placeholder=""
+                  id='challenge'
+                  onChange={event =>
+                    insertLine(event.target.value, event.target.id)}
+                  value={challenge}
+                  autoSize 
+                  allowClear 
+                />
+                <Button
+                  style={{ width: '100%', marginTop: 3 }}
+                  disabled={!stateChallenge}
+                  onClick={() => {
+                    addToScreen(1);
+                    setChallenge('');
+                  }}
+                >
+                  Adicionar desafio
+                </Button>
+                <ul>
+                  {challageArray.map((challageElemnt) =>
+                    <li key={challageElemnt}>{challageElemnt}</li>
+                  )}
+                </ul>
+              </Col>
+              <Col span={8}>
+                <span>
+                  Correspondentes atividades da monitoria
+                </span>
+                <TextArea
+                  placeholder=""
+                  id="activity"
+                  onChange={event =>
+                    insertLine(event.target.value, event.target.id)}
+                  value={activities}
+                  autoSize
+                  allowClear
+                />
+                <Button 
+                  style={{ width: '100%', marginTop: 3 }}
+                  onClick={() => {
+                    addToScreen(2);
+                    setActivities('');
+                  }}
+                  disabled={!stateActivity}
+                >
+                  Adicionar atividade
+                </Button>
+                <ul>
+                  {activitiesArray.map((activitiesElement) =>
+                    <li key={activitiesElement}>{activitiesElement}</li>
+                  )}
+                </ul>
+              </Col>
+              <Col span={8}>
+                <span>
+                  Estratégia para alcançar os estudantes
+                </span>
+                <TextArea
+                  placeholder=""
+                  id="strategy"
+                  onChange={event =>
+                    insertLine(event.target.value, event.target.id)}
+                  value={strategies}
+                  autoSize
+                  allowClear
+                />
+                <Button 
+                  style={{ width: '100%', marginTop: 3 }}
+                  onClick={() => {
+                    addToScreen(3);
+                    setStrategies('');
+                  }}
+                  disabled={!stateStrategy}
+                >
+                  Adicionar estratégia
+                </Button>
+                <ul>
+                  {strategiesArray.map((strategiesElement) =>
+                    <li key={strategiesElement}>{strategiesElement}</li>
+                  )}
+                </ul>
+              </Col>
+            </Row>
+            <Button
+              style={{
+                width: '100%',
+                marginTop: 3,
+                marginBottom: 3
+              }}
+              onClick={() => {
+                setTableValue([...valuesTable, {
+                  key: valuesTable.length,
+                  challenges: challageArray.map((e) => 
+                    <li key={e}> - {e}</li>),
+                  activities: activitiesArray.map((e) => 
+                    <li key={e}> - {e}</li>),
+                  strategies: challageArray.map((e) => 
+                    <li key={e}> - {e}</li>)
+                }]);
+                setActivitiesArray([]);
+                setChallageArray([]);
+                setStrategiesArray([]);
+              }}
+            >
+              Finalizar linha
+            </Button>
             {/* <div className="table">
               
               <TextArea rows={3} />
@@ -522,7 +712,6 @@ const NewProjectSubmissionForm: React.FC = () => {
               scelerisque pharetra. Curabitur porttitor imperdiet erat sed
               finibus. Curabitur id nisi a turpis bibendum molestie ac at dolor.
             </Checkbox>
-
             <Button
               className="primary-button"
               type="primary"
