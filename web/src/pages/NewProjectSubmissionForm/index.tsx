@@ -11,6 +11,8 @@ import {
   Row,
   Col,
   Table,
+  Anchor,
+  Typography,
 } from 'antd';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -45,12 +47,20 @@ const NewProjectSubmissionForm: React.FC = () => {
     name: string;
   }
 
+  type TableLineString = {
+    key: number;
+    challenges: Array<string>;
+    activities: Array<string>;
+    strategies: Array<string>;
+  };
+
   type TableLine = {
     key: number;
     challenges: Array<ReactNode>;
     activities: Array<ReactNode>;
     strategies: Array<ReactNode>;
   };
+
   const [form] = Form.useForm();
   const { Option } = Select;
   const { TextArea } = Input;
@@ -63,9 +73,6 @@ const NewProjectSubmissionForm: React.FC = () => {
   const [allCourses, setAllCourses] = useState<Course[]>();
   const [showTeacherForm, setShowTeacherForm] = useState<boolean>(false);
   const [showDisciplineForm, setShowDisciplineForm] = useState<boolean>(false);
-  const [stateChallenge, setChallangeState] = useState<boolean>(false);
-  const [stateStrategy, setStrategyState] = useState<boolean>(false);
-  const [stateActivity, setActivityState] = useState<boolean>(false);
   const [chClass, setChClass] = useState<number>(0);
   const [chExtraClass, setChExtraClass] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
@@ -73,16 +80,21 @@ const NewProjectSubmissionForm: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [line, setLine] = useState<TableLine>();
   // challenge states
+  const [stateChallenge, setChallangeState] = useState<boolean>(false);
   const [challenge, setChallenge] = useState<string>('');
   const [challageArray, setChallageArray] = useState<string[]>([]);
   // Activities states
+  const [stateActivity, setActivityState] = useState<boolean>(false);
   const [activities, setActivities] = useState<string>('');
   const [activitiesArray, setActivitiesArray] = useState<string[]>([]);
   // strategies states
+  const [stateStrategy, setStrategyState] = useState<boolean>(false);
   const [strategies, setStrategies] = useState<string>('');
   const [strategiesArray, setStrategiesArray] = useState<string[]>([]);
 
-  const [valuesTable, setTableValue] = useState<TableLine[]>([]);
+  const [valuesStringTable, setStringValeus] = useState<TableLineString[]>([]);
+  const [valuesTable, setValueTable] = useState<TableLine[]>([]);
+
   const validateMessages = {
     required: 'Campo Obrigatório',
     types: {
@@ -106,6 +118,10 @@ const NewProjectSubmissionForm: React.FC = () => {
       title: 'Estratégia para alcançar os estudantes',
       dataIndex: 'strategies',
       key: 'strategies'
+    },
+    {
+      dataIndex: 'icon',
+      key: 'icon'
     }
   ];
   useEffect(() => {
@@ -580,6 +596,7 @@ const NewProjectSubmissionForm: React.FC = () => {
               */}
             <small>Tabela definitiva</small>
             <Table
+              locale={{ emptyText: 'Nenhum dado inserido' }}
               dataSource={valuesTable}
               columns={columnsStrategies} 
               pagination={false} 
@@ -604,6 +621,7 @@ const NewProjectSubmissionForm: React.FC = () => {
                   onClick={() => {
                     addToScreen(1);
                     setChallenge('');
+                    insertLine('', 'challenge');
                   }}
                 >
                   Adicionar desafio
@@ -612,6 +630,13 @@ const NewProjectSubmissionForm: React.FC = () => {
                   {challageArray.map((challageElemnt) =>
                     <li key={challageElemnt}>{challageElemnt}</li>
                   )}
+                  {challageArray.length !== 0 ? (
+                    <Typography.Link
+                      onClick={() => setChallageArray([])}
+                    >
+                      Refazer coluna
+                    </Typography.Link>
+                  ) : null}
                 </ul>
               </Col>
               <Col span={8}>
@@ -632,6 +657,7 @@ const NewProjectSubmissionForm: React.FC = () => {
                   onClick={() => {
                     addToScreen(2);
                     setActivities('');
+                    insertLine('', 'activity');
                   }}
                   disabled={!stateActivity}
                 >
@@ -641,6 +667,13 @@ const NewProjectSubmissionForm: React.FC = () => {
                   {activitiesArray.map((activitiesElement) =>
                     <li key={activitiesElement}>{activitiesElement}</li>
                   )}
+                  {activitiesArray.length !== 0 ? (
+                    <Typography.Link
+                      onClick={() => setActivitiesArray([])}
+                    >
+                      Refazer coluna
+                    </Typography.Link>
+                  ) : null}
                 </ul>
               </Col>
               <Col span={8}>
@@ -661,6 +694,7 @@ const NewProjectSubmissionForm: React.FC = () => {
                   onClick={() => {
                     addToScreen(3);
                     setStrategies('');
+                    insertLine('', 'strategy');
                   }}
                   disabled={!stateStrategy}
                 >
@@ -670,6 +704,14 @@ const NewProjectSubmissionForm: React.FC = () => {
                   {strategiesArray.map((strategiesElement) =>
                     <li key={strategiesElement}>{strategiesElement}</li>
                   )}
+                  {strategiesArray.length !== 0 ? (
+                    <Typography.Link
+                      onClick={() => setStrategiesArray([])}
+                    >
+                      Refazer coluna
+                    </Typography.Link>
+                  ) : null}
+                  
                 </ul>
               </Col>
             </Row>
@@ -680,15 +722,24 @@ const NewProjectSubmissionForm: React.FC = () => {
                 marginBottom: 3
               }}
               onClick={() => {
-                setTableValue([...valuesTable, {
+                setStringValeus([...valuesStringTable, {
+                  key: valuesStringTable.length,
+                  challenges: challageArray,
+                  activities: activitiesArray,
+                  strategies: strategiesArray }
+                ]);
+                setValueTable([...valuesTable, {
                   key: valuesTable.length,
-                  challenges: challageArray.map((e) => 
-                    <li key={e}> - {e}</li>),
-                  activities: activitiesArray.map((e) => 
-                    <li key={e}> - {e}</li>),
-                  strategies: challageArray.map((e) => 
-                    <li key={e}> - {e}</li>)
-                }]);
+                  challenges: challageArray.map((chElement) =>
+                    <li key={chElement}>- {chElement}</li>
+                  ),
+                  activities: activitiesArray.map((actElement) => 
+                    <li key={actElement}>- {actElement}</li>
+                  ),
+                  strategies: strategiesArray.map((strElement) =>
+                    <li key={strElement}>- {strElement}</li>
+                  ) }
+                ]);
                 setActivitiesArray([]);
                 setChallageArray([]);
                 setStrategiesArray([]);
