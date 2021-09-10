@@ -59,6 +59,7 @@ const NewProjectSubmissionForm: React.FC = () => {
     challenges: Array<ReactNode>;
     activities: Array<ReactNode>;
     strategies: Array<ReactNode>;
+    icon: ReactNode;
   };
 
   const [form] = Form.useForm();
@@ -79,6 +80,7 @@ const NewProjectSubmissionForm: React.FC = () => {
   const [checkboxValue, setCheboxValue] = useState<boolean>(false);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [line, setLine] = useState<TableLine>();
+  const [keyState, addKeyState] = useState<number>(0);
   // challenge states
   const [stateChallenge, setChallangeState] = useState<boolean>(false);
   const [challenge, setChallenge] = useState<string>('');
@@ -105,6 +107,11 @@ const NewProjectSubmissionForm: React.FC = () => {
 
   const columnsStrategies = [
     {
+      title: 'id',
+      dataIndex: 'key',
+      key: 'key'
+    },
+    {
       title: 'Desafios de Aprendizagem a serem enfrentados',
       dataIndex: 'challenges',
       key: 'challenges'
@@ -120,6 +127,7 @@ const NewProjectSubmissionForm: React.FC = () => {
       key: 'strategies'
     },
     {
+      title: '',
       dataIndex: 'icon',
       key: 'icon'
     }
@@ -166,6 +174,10 @@ const NewProjectSubmissionForm: React.FC = () => {
     }
   }
 
+  function removeLineFromTable() {
+    console.log(valuesStringTable);
+  }
+
   function addToScreen(id: number){
     switch (id){
       case 1:
@@ -178,6 +190,36 @@ const NewProjectSubmissionForm: React.FC = () => {
         return (null);
     }
     
+  }
+
+  function addValuesToTable() {
+    setStringValeus([...valuesStringTable, {
+      key: keyState,
+      challenges: challageArray,
+      activities: activitiesArray,
+      strategies: strategiesArray }
+    ]);
+    setValueTable([...valuesTable, {
+      key: keyState,
+      challenges: (challageArray.map((chElement) =>
+        <li key={chElement}>- {chElement}</li>
+      )),
+      activities: (activitiesArray.map((actElement) => 
+        <li key={actElement}>- {actElement}</li>
+      )),
+      strategies: strategiesArray.map((strElement) =>
+        <li key={strElement}>- {strElement}</li>
+      ),
+      icon: (
+        <MdDeleteForever
+          size="24"
+          onClick={() => console.log(valuesStringTable)}
+        />) }
+    ]);
+    setActivitiesArray([]);
+    setChallageArray([]);
+    setStrategiesArray([]);
+    addKeyState(keyState+1);
   }
 
   return (
@@ -721,32 +763,11 @@ const NewProjectSubmissionForm: React.FC = () => {
                 marginTop: 3,
                 marginBottom: 3
               }}
-              onClick={() => {
-                setStringValeus([...valuesStringTable, {
-                  key: valuesStringTable.length,
-                  challenges: challageArray,
-                  activities: activitiesArray,
-                  strategies: strategiesArray }
-                ]);
-                setValueTable([...valuesTable, {
-                  key: valuesTable.length,
-                  challenges: challageArray.map((chElement) =>
-                    <li key={chElement}>- {chElement}</li>
-                  ),
-                  activities: activitiesArray.map((actElement) => 
-                    <li key={actElement}>- {actElement}</li>
-                  ),
-                  strategies: strategiesArray.map((strElement) =>
-                    <li key={strElement}>- {strElement}</li>
-                  ) }
-                ]);
-                setActivitiesArray([]);
-                setChallageArray([]);
-                setStrategiesArray([]);
-              }}
+              onClick={() => addValuesToTable()}
             >
               Finalizar linha
             </Button>
+            <Button onClick={() => console.log(valuesTable)}> teste </Button>
             {/* <div className="table">
               
               <TextArea rows={3} />
