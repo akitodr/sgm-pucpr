@@ -47,19 +47,11 @@ const NewProjectSubmissionForm: React.FC = () => {
     name: string;
   }
 
-  type TableLineString = {
+  type TableLine = {
     key: number;
     challenges: Array<string>;
     activities: Array<string>;
     strategies: Array<string>;
-  };
-
-  type TableLine = {
-    key: number;
-    challenges: Array<ReactNode>;
-    activities: Array<ReactNode>;
-    strategies: Array<ReactNode>;
-    icon: ReactNode;
   };
 
   const [form] = Form.useForm();
@@ -94,8 +86,7 @@ const NewProjectSubmissionForm: React.FC = () => {
   const [strategies, setStrategies] = useState<string>('');
   const [strategiesArray, setStrategiesArray] = useState<string[]>([]);
 
-  const [valuesStringTable, setStringValeus] = useState<TableLineString[]>([]);
-  const [valuesTable, setValueTable] = useState<TableLine[]>([]);
+  const [valuesStringTable, setStringValeus] = useState<TableLine[]>([]);
 
   const validateMessages = {
     required: 'Campo Obrigatório',
@@ -107,29 +98,45 @@ const NewProjectSubmissionForm: React.FC = () => {
 
   const columnsStrategies = [
     {
-      title: 'id',
-      dataIndex: 'key',
-      key: 'key'
-    },
-    {
       title: 'Desafios de Aprendizagem a serem enfrentados',
       dataIndex: 'challenges',
-      key: 'challenges'
+      key: 'challenges',
+      render: (array: String[]) => (
+        <ul>
+          {array.map((e) => <li key={array.indexOf(e)}>{e}</li>)}
+        </ul>
+      ),
     },
     {
       title: 'Correspondentes atividades da monitoria',
       dataIndex: 'activities',
-      key: 'activities'
+      key: 'activities',
+      render: (array: String[]) => (
+        <ul>
+          {array.map((e) => <li key={array.indexOf(e)}>{e}</li>)}
+        </ul>
+      )
     },
     {
       title: 'Estratégia para alcançar os estudantes',
       dataIndex: 'strategies',
-      key: 'strategies'
+      key: 'strategies',
+      render: (array: String[]) => (
+        <ul>
+          {array.map((e) => <li key={array.indexOf(e)}>{e}</li>)}
+        </ul>
+      )
     },
     {
       title: '',
-      dataIndex: 'icon',
-      key: 'icon'
+      dataIndex: 'key',
+      key: 'key',
+      render: (id: number) =>(
+        <MdDeleteForever
+          size='24'
+          onClick={() => removeLineFromTable(id)}
+        />
+      ),
     }
   ];
   useEffect(() => {
@@ -174,8 +181,9 @@ const NewProjectSubmissionForm: React.FC = () => {
     }
   }
 
-  function removeLineFromTable() {
-    console.log(valuesStringTable);
+  function removeLineFromTable(id: number) {
+    const newStringValues = valuesStringTable.filter(valor => id !== valor.key);
+    setStringValeus([...newStringValues]);
   }
 
   function addToScreen(id: number){
@@ -198,23 +206,6 @@ const NewProjectSubmissionForm: React.FC = () => {
       challenges: challageArray,
       activities: activitiesArray,
       strategies: strategiesArray }
-    ]);
-    setValueTable([...valuesTable, {
-      key: keyState,
-      challenges: (challageArray.map((chElement) =>
-        <li key={chElement}>- {chElement}</li>
-      )),
-      activities: (activitiesArray.map((actElement) => 
-        <li key={actElement}>- {actElement}</li>
-      )),
-      strategies: strategiesArray.map((strElement) =>
-        <li key={strElement}>- {strElement}</li>
-      ),
-      icon: (
-        <MdDeleteForever
-          size="24"
-          onClick={() => console.log(valuesStringTable)}
-        />) }
     ]);
     setActivitiesArray([]);
     setChallageArray([]);
@@ -639,122 +630,129 @@ const NewProjectSubmissionForm: React.FC = () => {
             <small>Tabela definitiva</small>
             <Table
               locale={{ emptyText: 'Nenhum dado inserido' }}
-              dataSource={valuesTable}
+              dataSource={valuesStringTable}
               columns={columnsStrategies} 
               pagination={false} 
             />
-            <Row>
+            <Row className='inputs-activities'>
               <Col span={8}>
-                <span>
-                  Desafios de aprendizagem a serem enfrentados
-                </span>
-                <TextArea 
-                  placeholder=""
-                  id='challenge'
-                  onChange={event =>
-                    insertLine(event.target.value, event.target.id)}
-                  value={challenge}
-                  autoSize 
-                  allowClear 
-                />
-                <Button
-                  style={{ width: '100%', marginTop: 3 }}
-                  disabled={!stateChallenge}
-                  onClick={() => {
-                    addToScreen(1);
-                    setChallenge('');
-                    insertLine('', 'challenge');
-                  }}
-                >
-                  Adicionar desafio
-                </Button>
-                <ul>
-                  {challageArray.map((challageElemnt) =>
-                    <li key={challageElemnt}>{challageElemnt}</li>
-                  )}
-                  {challageArray.length !== 0 ? (
-                    <Typography.Link
-                      onClick={() => setChallageArray([])}
-                    >
-                      Refazer coluna
-                    </Typography.Link>
-                  ) : null}
-                </ul>
+                <div style={{ margin: 7 }}>
+                  <span>
+                    Desafios de aprendizagem a serem enfrentados
+                  </span>
+                  <TextArea 
+                    style={{ width: '83%' }}
+                    placeholder=""
+                    id='challenge'
+                    onChange={event =>
+                      insertLine(event.target.value, event.target.id)}
+                    value={challenge}
+                    autoSize 
+                    allowClear 
+                  />
+                  <Button
+                    disabled={!stateChallenge}
+                    onClick={() => {
+                      addToScreen(1);
+                      setChallenge('');
+                      insertLine('', 'challenge');
+                    }}
+                  >
+                    +
+                  </Button>
+                  <ul>
+                    {challageArray.map((challageElemnt) =>
+                      <li key={challageElemnt}>{challageElemnt}</li>
+                    )}
+                    {challageArray.length !== 0 ? (
+                      <Typography.Link
+                        onClick={() => setChallageArray([])}
+                      >
+                        Refazer coluna
+                      </Typography.Link>
+                    ) : null}
+                  </ul>
+                </div>
               </Col>
               <Col span={8}>
-                <span>
-                  Correspondentes atividades da monitoria
-                </span>
-                <TextArea
-                  placeholder=""
-                  id="activity"
-                  onChange={event =>
-                    insertLine(event.target.value, event.target.id)}
-                  value={activities}
-                  autoSize
-                  allowClear
-                />
-                <Button 
-                  style={{ width: '100%', marginTop: 3 }}
-                  onClick={() => {
-                    addToScreen(2);
-                    setActivities('');
-                    insertLine('', 'activity');
-                  }}
-                  disabled={!stateActivity}
-                >
-                  Adicionar atividade
-                </Button>
-                <ul>
-                  {activitiesArray.map((activitiesElement) =>
-                    <li key={activitiesElement}>{activitiesElement}</li>
-                  )}
-                  {activitiesArray.length !== 0 ? (
-                    <Typography.Link
-                      onClick={() => setActivitiesArray([])}
-                    >
-                      Refazer coluna
-                    </Typography.Link>
-                  ) : null}
-                </ul>
+                <div style={{ margin: 7 }}>
+                  <span>
+                    Correspondentes atividades da monitoria
+                    <br />
+                  </span>
+                  <TextArea
+                    placeholder=""
+                    id="activity"
+                    onChange={event =>
+                      insertLine(event.target.value, event.target.id)}
+                    value={activities}
+                    style={{ width: '81%' }}
+                    autoSize
+                    allowClear
+                  />
+                  <Button
+                    onClick={() => {
+                      addToScreen(2);
+                      setActivities('');
+                      insertLine('', 'activity');
+                    }}
+                    disabled={!stateActivity}
+                  >
+                    +
+                  </Button>
+                  <ul>
+                    {activitiesArray.map((activitiesElement) =>
+                      <li key={activitiesElement}>{activitiesElement}</li>
+                    )}
+                    {activitiesArray.length !== 0 ? (
+                      <Typography.Link
+                        onClick={() => setActivitiesArray([])}
+                      >
+                        Refazer coluna
+                      </Typography.Link>
+                    ) : null}
+                  </ul>
+                </div>
               </Col>
               <Col span={8}>
-                <span>
-                  Estratégia para alcançar os estudantes
-                </span>
-                <TextArea
-                  placeholder=""
-                  id="strategy"
-                  onChange={event =>
-                    insertLine(event.target.value, event.target.id)}
-                  value={strategies}
-                  autoSize
-                  allowClear
-                />
-                <Button 
-                  style={{ width: '100%', marginTop: 3 }}
-                  onClick={() => {
-                    addToScreen(3);
-                    setStrategies('');
-                    insertLine('', 'strategy');
-                  }}
-                  disabled={!stateStrategy}
-                >
-                  Adicionar estratégia
-                </Button>
-                <ul>
-                  {strategiesArray.map((strategiesElement) =>
-                    <li key={strategiesElement}>{strategiesElement}</li>
-                  )}
-                  {strategiesArray.length !== 0 ? (
-                    <Typography.Link
-                      onClick={() => setStrategiesArray([])}
-                    >
-                      Refazer coluna
-                    </Typography.Link>
-                  ) : null}
-                  
-                </ul>
+                <div style={{ margin: 7 }}>
+                  <span style={{ marginInlineEnd: 15 }}>
+                    Estratégia para alcançar os estudantes
+                  </span>
+                  <TextArea
+                    style={{ width: '83%' }}
+                    placeholder=""
+                    id="strategy"
+                    onChange={event =>
+                      insertLine(event.target.value, event.target.id)}
+                    value={strategies}
+                    autoSize
+                    allowClear
+                  />
+                  <Button 
+                    onClick={() => {
+                      addToScreen(3);
+                      setStrategies('');
+                      insertLine('', 'strategy');
+                    }}
+                    disabled={!stateStrategy}
+                  >
+                    +
+                  </Button>
+                  <ul>
+                    {strategiesArray.map((strategiesElement) =>
+                      <li key={strategiesElement}>{strategiesElement}</li>
+                    )}
+                    {strategiesArray.length !== 0 ? (
+                      <Typography.Link
+                        onClick={() => setStrategiesArray([])}
+                      >
+                        Refazer coluna
+                      </Typography.Link>
+                    ) : null}
+                    
+                  </ul>
+                </div>
               </Col>
             </Row>
             <Button
@@ -767,7 +765,6 @@ const NewProjectSubmissionForm: React.FC = () => {
             >
               Finalizar linha
             </Button>
-            <Button onClick={() => console.log(valuesTable)}> teste </Button>
             {/* <div className="table">
               
               <TextArea rows={3} />

@@ -48,7 +48,7 @@ export const FormContainer = styled.div`
   padding: 1.2rem 2rem;
   border-radius: 6px;
   box-shadow: 0px 1px 8px #aaa;
-  width: 70%;
+  width: 75%;
 
   .primary-button {
     width: 30%;
@@ -94,6 +94,14 @@ export const FormContainer = styled.div`
       color: var(--background-button-danger-color);
       cursor: pointer;
       align-self: center;
+    }
+  }
+
+  .inputs-activities{
+    button{
+      position: absolute;
+      float: right;
+      margin-left: 2px;
     }
   }
 
