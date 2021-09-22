@@ -1,6 +1,6 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
-import { MdAdd, MdDeleteForever } from 'react-icons/md';
+import { MdClear, MdDeleteForever, MdDone, MdEdit } from 'react-icons/md';
 import {
   Form,
   Input,
@@ -11,9 +11,11 @@ import {
   Row,
   Col,
   Table,
-  Anchor,
   Typography,
+  Tooltip,
 } from 'antd';
+
+import { Store } from 'antd/lib/form/interface';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import logoMonitoria from '../../assets/Logo-Monitoria.svg';
@@ -49,9 +51,14 @@ const NewProjectSubmissionForm: React.FC = () => {
 
   type TableLine = {
     key: number;
-    challenges: Array<string>;
-    activities: Array<string>;
-    strategies: Array<string>;
+    challanges: Array<ValueOfTable>;
+    activities: Array<ValueOfTable>;
+    strategies: Array<ValueOfTable>;
+  };
+
+  type ValueOfTable = {
+    value: string;
+    editing?: boolean;
   };
 
   const [form] = Form.useForm();
@@ -71,20 +78,19 @@ const NewProjectSubmissionForm: React.FC = () => {
   const [totalHours, setTotalHours] = useState<number>(0);
   const [checkboxValue, setCheboxValue] = useState<boolean>(false);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [line, setLine] = useState<TableLine>();
   const [keyState, addKeyState] = useState<number>(0);
-  // challenge states
-  const [stateChallenge, setChallangeState] = useState<boolean>(false);
-  const [challenge, setChallenge] = useState<string>('');
-  const [challageArray, setChallageArray] = useState<string[]>([]);
+  // challange states
+  const [stateChallange, setChallangeState] = useState<boolean>(false);
+  const [challange, setChallange] = useState<string>('');
+  const [challageArray, setChallageArray] = useState<ValueOfTable[]>([]);
   // Activities states
   const [stateActivity, setActivityState] = useState<boolean>(false);
   const [activities, setActivities] = useState<string>('');
-  const [activitiesArray, setActivitiesArray] = useState<string[]>([]);
+  const [activitiesArray, setActivitiesArray] = useState<ValueOfTable[]>([]);
   // strategies states
   const [stateStrategy, setStrategyState] = useState<boolean>(false);
   const [strategies, setStrategies] = useState<string>('');
-  const [strategiesArray, setStrategiesArray] = useState<string[]>([]);
+  const [strategiesArray, setStrategiesArray] = useState<ValueOfTable[]>([]);
 
   const [valuesStringTable, setStringValeus] = useState<TableLine[]>([]);
 
@@ -99,11 +105,11 @@ const NewProjectSubmissionForm: React.FC = () => {
   const columnsStrategies = [
     {
       title: 'Desafios de Aprendizagem a serem enfrentados',
-      dataIndex: 'challenges',
-      key: 'challenges',
-      render: (array: String[]) => (
+      dataIndex: 'challanges',
+      key: 'challanges',
+      render: (array: ValueOfTable[]) => (
         <ul>
-          {array.map((e) => <li key={array.indexOf(e)}>{e}</li>)}
+          {array.map((e) => <li key={array.indexOf(e)}>{e.value}</li>)}
         </ul>
       ),
     },
@@ -111,9 +117,9 @@ const NewProjectSubmissionForm: React.FC = () => {
       title: 'Correspondentes atividades da monitoria',
       dataIndex: 'activities',
       key: 'activities',
-      render: (array: String[]) => (
+      render: (array: ValueOfTable[]) => (
         <ul>
-          {array.map((e) => <li key={array.indexOf(e)}>{e}</li>)}
+          {array.map((e) => <li key={array.indexOf(e)}>{e.value}</li>)}
         </ul>
       )
     },
@@ -121,9 +127,9 @@ const NewProjectSubmissionForm: React.FC = () => {
       title: 'Estratégia para alcançar os estudantes',
       dataIndex: 'strategies',
       key: 'strategies',
-      render: (array: String[]) => (
+      render: (array: ValueOfTable[]) => (
         <ul>
-          {array.map((e) => <li key={array.indexOf(e)}>{e}</li>)}
+          {array.map((e) => <li key={array.indexOf(e)}>{e.value}</li>)}
         </ul>
       )
     },
@@ -134,6 +140,7 @@ const NewProjectSubmissionForm: React.FC = () => {
       render: (id: number) =>(
         <MdDeleteForever
           size='24'
+          className="remove"
           onClick={() => removeLineFromTable(id)}
         />
       ),
@@ -157,6 +164,92 @@ const NewProjectSubmissionForm: React.FC = () => {
     });
   }
 
+  function handleEdit(element: ValueOfTable, id: string){
+    switch (id){
+      case 'challange':{
+        console.log('achei');
+        setChallageArray(challageArray.map((e) => {
+          if (e !== element) return e;
+          return { ...e, editing: true };
+        }));
+        break;
+      }
+      case 'activities':{
+        setActivitiesArray(activitiesArray.map((e) => {
+          if (e !== element) return e;
+          return { ...e, editing: true };
+        }));
+        break;
+      }
+      case 'strategies':{
+        setStrategiesArray(strategiesArray.map((e) => {
+          if (e !== element) return e;
+          return { ...e, editing: true };
+        }));
+        break;
+      }
+    }
+  }
+
+  function handleFinish(
+    { name }: Store, 
+    element: ValueOfTable, 
+    id: string){
+    switch (id){
+      case 'challange':{
+        setChallageArray(challageArray.map((e) => {
+          if (e !== element){
+            return e;
+          }
+          return ({ ...e, editing: false, value: name });
+        }));
+        break;
+      }
+      case 'activities':{
+        setActivitiesArray(activitiesArray.map((e) => {
+          if (e !== element){
+            return e;
+          }
+          return ({ ...e, editing: false, value: name });
+        }));
+        break;
+      }
+      case 'strategies':{
+        setStrategiesArray(strategiesArray.map((e) => {
+          if (e !== element){
+            return e;
+          }
+          return ({ ...e, editing: false, value: name });
+        }));
+        break;
+      }
+    }
+  }
+
+  function handleRemoveArray(index: number, id: string){
+    switch (id){
+      case 'challange':{
+        const newArray = challageArray.filter(e => 
+          index !== challageArray.indexOf(e));
+        return (newArray);
+      }
+      case 'activities':{
+        const newArray = activitiesArray.filter(e =>
+          index !== activitiesArray.indexOf(e));
+        return (newArray);
+      }
+      case 'strategies':{
+        const newArray = strategiesArray.filter(e =>
+          index !== strategiesArray.indexOf(e));
+        return (newArray);
+      }
+      default:{
+        return ([]);
+      }
+    }
+    
+  }
+
   function loadSchoolCourses(schoolId: number) {
     SchoolService.getCourses(schoolId).then((response) => {
       setCourses(response.data);
@@ -167,8 +260,8 @@ const NewProjectSubmissionForm: React.FC = () => {
 
   function insertLine(input: string, id: string) {
     switch (id) {
-      case 'challenge':
-        setChallenge(input);
+      case 'challange':
+        setChallange(input);
         return ((input === '') ? setChallangeState(false) : setChallangeState(true));
       case 'activity':
         setActivities(input);
@@ -189,11 +282,20 @@ const NewProjectSubmissionForm: React.FC = () => {
   function addToScreen(id: number){
     switch (id){
       case 1:
-        return (setChallageArray([...challageArray, challenge]));
+        return (setChallageArray([...challageArray, {
+          value: challange, 
+          editing: false 
+        }]));
       case 2:
-        return (setActivitiesArray([...activitiesArray, activities]));
+        return (setActivitiesArray([...activitiesArray, {
+          value: activities,
+          editing: false
+        }]));
       case 3:
-        return (setStrategiesArray([...strategiesArray, strategies]));
+        return (setStrategiesArray([...strategiesArray, {
+          value: strategies,
+          editing: false
+        }]));
       default:
         return (null);
     }
@@ -203,7 +305,7 @@ const NewProjectSubmissionForm: React.FC = () => {
   function addValuesToTable() {
     setStringValeus([...valuesStringTable, {
       key: keyState,
-      challenges: challageArray,
+      challanges: challageArray,
       activities: activitiesArray,
       strategies: strategiesArray }
     ]);
@@ -540,7 +642,7 @@ const NewProjectSubmissionForm: React.FC = () => {
 
             <p style={{ fontWeight: 'bolder' }}>2.2 Desafios de aprendizagem</p>
             <Form.Item
-              name="challenges_justification"
+              name="challanges_justification"
               label="Indique os principais desafios ou dificuldades que o professor orientador prevê encontrar durante a execução do projeto tendo em vista as características da(s) disciplina(s), o perfil e as dificuldades dos estudantes que serão atendidos pela monitoria. Analise quais são as dificuldades de aprendizagem que os estudantes dessa(s) disciplina(s) enfrentam e que você tentará resolver com este projeto de monitoria."
               rules={[{ required: true }]}
             >
@@ -570,7 +672,7 @@ const NewProjectSubmissionForm: React.FC = () => {
             <Row justify="space-between" align="middle">
               <Col span={7}>
                 <Form.Item
-                  name="learning_challenges"
+                  name="learning_challanges"
                   label="Desafios de aprendizagem a serem enfrentados"
                   rules={[{ required: true }]}
                 >
@@ -643,34 +745,79 @@ const NewProjectSubmissionForm: React.FC = () => {
                   <TextArea 
                     style={{ width: '83%' }}
                     placeholder=""
-                    id='challenge'
+                    id='challange'
                     onChange={event =>
                       insertLine(event.target.value, event.target.id)}
-                    value={challenge}
+                    value={challange}
                     autoSize 
                     allowClear 
                   />
                   <Button
-                    disabled={!stateChallenge}
+                    disabled={!stateChallange || challageArray.length >= 1}
                     onClick={() => {
                       addToScreen(1);
-                      setChallenge('');
-                      insertLine('', 'challenge');
+                      setChallange('');
+                      insertLine('', 'challange');
                     }}
                   >
                     +
                   </Button>
-                  <ul>
-                    {challageArray.map((challageElemnt) =>
-                      <li key={challageElemnt}>{challageElemnt}</li>
+                  <ul style={{ marginTop: 5 }}>
+                    {challageArray.map((challageElement, index) =>
+                      <li key={challageElement.value}>
+                        {(challageElement.editing) ? (
+                          <Form
+                            style={{
+                              width: '100%'
+                            }}
+                            layout='inline'
+                            initialValues={{ name: challageElement.value }}
+                            onFinish={(store) => handleFinish(store, challageElement, 'challange')}
+                          >
+                            <Form.Item name="name">
+                              <Input
+                                size="small"
+                                style={{ width: '100%' }}
+                              />
+                            </Form.Item>
+                            <Form.Item>
+                              <Button
+                                size="small"
+                                style={{
+                                  top: 0,
+                                  left: -15,
+                                  alignContent: 'center',
+                                  marginTop: 5
+                                }}
+                                type='text'
+                                htmlType="submit"
+                              >
+                                <MdDone 
+                                  className="Icons edit"
+                                />
+                              </Button>
+                            </Form.Item>
+                          </Form>
+                        ) : (
+                          <>
+                            {challageElement.value}
+                            <MdEdit 
+                              key={challageElement.value}
+                              size={15}
+                              className='Icons edit'
+                              onClick={() => handleEdit(challageElement, 'challange')}
+                            />
+                            <MdClear
+                              size={15}
+                              className='remove'
+                              onClick={() => 
+                                setChallageArray(
+                                  [...handleRemoveArray(index, 'challange')])}
+                            />
+                          </>
+                        )}
+                      </li>
                     )}
-                    {challageArray.length !== 0 ? (
-                      <Typography.Link
-                        onClick={() => setChallageArray([])}
-                      >
-                        Refazer coluna
-                      </Typography.Link>
-                    ) : null}
                   </ul>
                 </div>
               </Col>
@@ -701,16 +848,60 @@ const NewProjectSubmissionForm: React.FC = () => {
                     +
                   </Button>
                   <ul>
-                    {activitiesArray.map((activitiesElement) =>
-                      <li key={activitiesElement}>{activitiesElement}</li>
+                    {activitiesArray.map((activitiesElement, index) =>
+                      <li key={activitiesElement.value}>
+                        {(activitiesElement.editing) ? (
+                          <Form
+                            initialValues={{ name: activitiesElement.value }}
+                            layout="inline"
+                            style={{ width: '100%' }}
+                            onFinish={(store) => handleFinish(store, activitiesElement, 'activities')}
+                          >
+                            <Form.Item name="name">
+                              <Input
+                                size="small"
+                                style={{ width: '100%' }}
+                              />
+                            </Form.Item>
+                            <Form.Item>
+                              <Button
+                                size="small"
+                                style={{
+                                  top: 0,
+                                  left: -15,
+                                  alignContent: 'center',
+                                  marginTop: 5
+                                }}
+                                type='text'
+                                htmlType="submit"
+                              >
+                                <MdDone 
+                                  className="Icons edit"
+                                />
+                              </Button>
+                            </Form.Item>
+                          </Form>
+                        ) : (
+                          <>
+                            {activitiesElement.value}
+                            <MdEdit 
+                              key={activitiesElement.value}
+                              size={15}
+                              className='Icons edit'
+                              onClick={() => handleEdit(activitiesElement, 'activities')}
+                            />
+                            <MdClear
+                              size={15}
+                              className='remove'
+                              onClick={() => 
+                                setActivitiesArray(
+                                  [...handleRemoveArray(index, 'activities')]
+                                )}
+                            />
+                          </>
+                        )}
+                      </li>
                     )}
-                    {activitiesArray.length !== 0 ? (
-                      <Typography.Link
-                        onClick={() => setActivitiesArray([])}
-                      >
-                        Refazer coluna
-                      </Typography.Link>
-                    ) : null}
                   </ul>
                 </div>
               </Col>
@@ -740,17 +931,59 @@ const NewProjectSubmissionForm: React.FC = () => {
                     +
                   </Button>
                   <ul>
-                    {strategiesArray.map((strategiesElement) =>
-                      <li key={strategiesElement}>{strategiesElement}</li>
+                    {strategiesArray.map((strategiesElement, index) =>
+                      <li key={strategiesElement.value}>
+                        {(strategiesElement.editing) ? (
+                          <Form
+                            initialValues={{ name: strategiesElement.value }}
+                            layout="inline"
+                            style={{ width: '100%' }}
+                            onFinish={(store) => handleFinish(store, strategiesElement, 'strategies')}
+                          >
+                            <Form.Item name="name">
+                              <Input
+                                size="small"
+                                style={{ width: '100%' }}
+                              />
+                            </Form.Item>
+                            <Form.Item>
+                              <Button
+                                size="small"
+                                style={{
+                                  top: 0,
+                                  left: -15,
+                                  alignContent: 'center',
+                                  marginTop: 5
+                                }}
+                                type='text'
+                                htmlType="submit"
+                              >
+                                <MdDone 
+                                  className="Icons edit"
+                                />
+                              </Button>
+                            </Form.Item>
+                          </Form>
+                        ) : (
+                          <>
+                            {strategiesElement.value}
+                            <MdEdit 
+                              key={strategiesElement.value}
+                              size={15}
+                              className='Icons edit'
+                              onClick={() => handleEdit(strategiesElement, 'strategies')}
+                            />
+                            <MdClear
+                              size={15}
+                              className='remove'
+                              onClick={() => 
+                                setStrategiesArray(
+                                  [...handleRemoveArray(index, 'strategies')])}
+                            />
+                          </>
+                        )}
+                      </li>
                     )}
-                    {strategiesArray.length !== 0 ? (
-                      <Typography.Link
-                        onClick={() => setStrategiesArray([])}
-                      >
-                        Refazer coluna
-                      </Typography.Link>
-                    ) : null}
-                    
                   </ul>
                 </div>
               </Col>
@@ -762,6 +995,11 @@ const NewProjectSubmissionForm: React.FC = () => {
                 marginBottom: 3
               }}
               onClick={() => addValuesToTable()}
+              disabled={
+                ((challageArray.length
+                  && activitiesArray.length 
+                  && strategiesArray.length) ===0 )
+              }
             >
               Finalizar linha
             </Button>

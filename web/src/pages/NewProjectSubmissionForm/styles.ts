@@ -62,6 +62,27 @@ export const FormContainer = styled.div`
     grid-column-gap: 1rem;
   }
 
+  .li-pre-line{
+    margin-top: 9px;
+  }
+
+  .Icons{
+    margin-left: 5px;
+  }
+  .edit{
+      color: #278cc5;
+    }
+  .remove{
+    color: red;
+  }
+
+  .form-editing{
+    white-space: nowrap;
+    *{
+      float: left;
+    }
+  }
+
   span {
     font-weight: bold;
   }
