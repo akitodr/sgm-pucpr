@@ -315,6 +315,10 @@ const NewProjectSubmissionForm: React.FC = () => {
     addKeyState(keyState+1);
   }
 
+  const onFinish = (values: object) => {
+    console.log(values);
+  };
+
   return (
     <div>
       <Header>
@@ -337,7 +341,7 @@ const NewProjectSubmissionForm: React.FC = () => {
             form={form}
             layout="vertical"
             name="nest-messages"
-            onFinish={() => console.log('Done')}
+            onFinish={() => console.log('Done!')}
             validateMessages={validateMessages}
           >
             <div className="fisrt-line">
@@ -401,115 +405,135 @@ const NewProjectSubmissionForm: React.FC = () => {
                 </Select>
               </Form.Item>
             </div>
-
-            <Form.Item name="teachers_id" label="Professor(es) proponente(s)">
-              <Button type="primary" onClick={() => setShowTeacherForm(true)}>
-                {/* <MdAdd size="18" /> */}
-                Adicionar Professor
-              </Button>
-              {showTeacherForm ? (
-                <div className="input-teachers-group">
-                  <Form.Item
-                    name="teacher_name"
-                    label="Nome completo"
-                    rules={[{ required: true }]}
-                  >
-                    <Input placeholder="Ex: João da Silva Pereira" />
+            <Form.List name="teachers_id">
+              {(fields, { add, remove }) => (
+                <>
+                  <Form.Item label="Professor(es) proponente(s)">
+                    <Button 
+                      type="primary"
+                      onClick={() => add()}
+                    >
+                      Adicionar Professor
+                    </Button>
                   </Form.Item>
-                  <Form.Item
-                    name="teacher_email"
-                    label="E-mail institucional"
-                    rules={[{ required: true }]}
-                  >
-                    <Input
-                      placeholder="Ex: joao.pereira"
-                      addonAfter="@pucpr.br"
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name="teacher_phone_id"
-                    label="Telefone"
-                    rules={[{ required: true }]}
-                  >
-                    <Input placeholder="Ex: (41) 99999-9999" />
-                  </Form.Item>
-                  <MdDeleteForever
-                    size="24"
-                    onClick={() => setShowTeacherForm(false)}
-                  />
-                </div>
-              ) : (
-                <></>
-              )}
-            </Form.Item>
-
-            <Form.Item name="disciplines_id" label="Disciplinas do Projeto">
-              <Button
-                type="primary"
-                onClick={() => setShowDisciplineForm(true)}
-              >
-                {/* <MdAdd size="18" /> */}
-                Adicionar Disciplina
-              </Button>
-              {showDisciplineForm ? (
-                <div className="input-disciplines-group">
-                  <div className="first-line-group">
-                    <Form.Item
-                      name="disciplines_name"
-                      label="Nome da disciplina"
-                      rules={[{ required: true }]}
-                    >
-                      <Input placeholder="Ex: Farmacologia Clínica" />
-                    </Form.Item>
-                    <Form.Item
-                      name="disciplines_code"
-                      label="Código da disciplina"
-                      rules={[{ required: true }]}
-                    >
-                      <Input placeholder="Ex: SB07030-04" />
-                    </Form.Item>
-                    <MdDeleteForever
-                      size="24"
-                      onClick={() => setShowDisciplineForm(false)}
-                    />
-                  </div>
-                  <div className="second-line-group">
-                    <Form.Item
-                      name="disciplines_ch"
-                      label="Carga horária semanal"
-                      rules={[{ required: true }]}
-                    >
-                      <InputNumber
-                        step="2"
-                        placeholder="Ex: 20"
-                        min={2}
-                        max={80}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name="disciplines_course"
-                      label="Curso de vínculo da disciplina"
-                      rules={[{ required: true }]}
-                    >
-                      <Select
-                        showSearch
-                        placeholder="Ex: Farmácia"
-                        optionFilterProp="children"
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    <div key={key} className="input-teachers-group">
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'teacher_name']}
+                        fieldKey={[fieldKey, 'teacher_name']}
+                        label="Nome completo"
+                        rules={[{ required: true }]}
                       >
-                        {allCourses?.map((course) => (
-                          <Option key={course.id} value={course.id}>
-                            {course.name}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
-                  </div>
-                </div>
-              ) : (
-                <> </>
+                        <Input placeholder="Ex: João da Silva Pereira" />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'teacher_email']}
+                        fieldKey={[fieldKey, 'teacher_email']}
+                        label="E-mail institucional"
+                        rules={[{ required: true }]}
+                      >
+                        <Input
+                          placeholder="Ex: joao.pereira"
+                          addonAfter="@pucpr.br"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'teacher_phone_id']}
+                        fieldKey={[fieldKey, 'teacher_phone_id']}
+                        label="Telefone"
+                        rules={[{ required: true }]}
+                      >
+                        <Input placeholder="Ex: (41) 99999-9999" />
+                      </Form.Item>
+                      <MdDeleteForever
+                        size="24" 
+                        onClick={() => remove(name)}
+                      />
+                    </div>
+                  ))}
+                </>
               )}
-            </Form.Item>
-
+            </Form.List>
+            <Form.List name="disciplines_id">
+              {(fields, { add, remove }) => (
+                <>
+                  <Form.Item label="Disciplinas do Projeto">
+                    <Button
+                      type="primary"
+                      onClick={() => add()}
+                    >
+                      Adicionar Disciplina
+                    </Button>
+                  </Form.Item>
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    <div key={key} className="input-disciplines-group">
+                      <div className="first-line-group">
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'disciplines_name']}
+                          fieldKey={[fieldKey, 'disciplines_name']}
+                          label="Nome da disciplina"
+                          rules={[{ required: true }]}
+                        >
+                          <Input placeholder="Ex: Farmacologia Clínica" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'disciplines_code']}
+                          fieldKey={[fieldKey, 'disciplines_code']}
+                          label="Código da disciplina"
+                          rules={[{ required: true }]}
+                        >
+                          <Input placeholder="Ex: SB07030-04" />
+                        </Form.Item>
+                        <MdDeleteForever
+                          size="24"
+                          onClick={() => remove(name)}
+                        />
+                      </div>
+                      <div className="second-line-group">
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'disciplines_ch']}
+                          fieldKey={[fieldKey, 'disciplines_ch']}
+                          label="Carga horária semanal"
+                          rules={[{ required: true }]}
+                        >
+                          <InputNumber
+                            step="2"
+                            placeholder="Ex: 20"
+                            min={2}
+                            max={80}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'disciplines_course']}
+                          fieldKey={[fieldKey, 'disciplines_course']}
+                          label="Curso de vínculo da disciplina"
+                          rules={[{ required: true }]}
+                        >
+                          <Select
+                            showSearch
+                            placeholder="Ex: Farmácia"
+                            optionFilterProp="children"
+                          >
+                            {allCourses?.map((course) => (
+                              <Option key={course.id} value={course.id}>
+                                {course.name}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </Form.List>
             <p style={{ fontWeight: 'bolder' }}>
               1.1 Modalidade de atendimento do(s) monitor(es):
             </p>
