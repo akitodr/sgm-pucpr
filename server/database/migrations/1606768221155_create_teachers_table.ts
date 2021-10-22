@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/semi */
 import BaseSchema from '@ioc:Adonis/Lucid/Schema';
 
 export default class CreateTeachersTables extends BaseSchema {
   protected tableName = 'teachers';
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id');
-
+      // Fields:
       table.string('name').notNullable();
       table.string('code');
       table.string('email');
@@ -22,7 +23,7 @@ export default class CreateTeachersTables extends BaseSchema {
     });
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName);
   }
 }

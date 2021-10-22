@@ -45,3 +45,5 @@ Route.post('/projects/import', 'ProjectsController.import');
 Route.resource('/terms-of-service', 'TermOfServiceController').apiOnly();
 
 Route.resource('/projects-students', 'ProjectStudentsController').apiOnly();
+
+Route.get('/strategies', 'StrategiesController.index')

@@ -1,0 +1,26 @@
+{
+    "name": "Joseph di Maroni",
+    "cpf": "000.111.222-33",
+    "data": "1990-01-20",
+    "phone":"3300-2211",
+    "email":"joseph@gmail.com",
+    "institucional":"joseph.maroni@pucpr.br",
+    "status":"ativo",
+    "valido": true,
+    "updt": false,
+    "school": 2,
+    "curso": 6
+};
+{
+    "name": "Valentina Sarah Melo",
+    "cpf": "563.635.972-18",
+    "data": "1981-06-08",
+    "phone":"98742-7217",
+    "email":"valentinasarahmelo-84@iblojas.com.br",
+    "institucional":"valentinasarahmelo@pucpr.br",
+    "status":"ativo",
+    "valido": true,
+    "updt": false,
+    "school": 2,
+    "curso": 6
+}

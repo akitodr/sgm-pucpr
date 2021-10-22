@@ -1,0 +1,27 @@
+{
+    "name":"Diogo Renato Vieira",
+    "code": "06",
+    "email": "diogorenatovieira_@afujita.com.br",
+    "phone": "(61) 98664-7964",
+    "updt": true,
+    "school": 2,
+    "course": 14
+};
+{
+    "name":"Catarina Fernanda Nina Martins",
+    "code": "07",
+    "email": "catarinafernandaninamartins-73@papayacomunicacao.com.br",
+    "phone": "(69) 98487-9866",
+    "updt": false,
+    "school": 7,
+    "course": 30
+};
+{
+    "name":"Camila Yasmin Sophia Silva",
+    "code": "08",
+    "email": "ccamilayasminsophiasilva@br.flextronics.com",
+    "phone": "(34) 98979-1322",
+    "updt": false,
+    "school": 3,
+    "course": 20
+}
