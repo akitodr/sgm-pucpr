@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaEllipsisH } from 'react-icons/fa';
+import { FaEllipsisH, FaPray, FaRockrms } from 'react-icons/fa';
 import { MdClear, MdDeleteForever, MdDone, MdEdit } from 'react-icons/md';
 import {
   Form,
@@ -341,7 +341,7 @@ const NewProjectSubmissionForm: React.FC = () => {
             form={form}
             layout="vertical"
             name="nest-messages"
-            onFinish={() => console.log('Done!')}
+            onFinish={onFinish}
             validateMessages={validateMessages}
           >
             <div className="fisrt-line">
@@ -1022,7 +1022,7 @@ const NewProjectSubmissionForm: React.FC = () => {
               disabled={
                 ((challageArray.length
                   && activitiesArray.length 
-                  && strategiesArray.length) ===0 )
+                  && strategiesArray.length) === 0 )
               }
             >
               Finalizar linha

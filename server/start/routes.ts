@@ -46,4 +46,4 @@ Route.resource('/terms-of-service', 'TermOfServiceController').apiOnly();
 
 Route.resource('/projects-students', 'ProjectStudentsController').apiOnly();
 
-Route.get('/strategies', 'StrategiesController.index')
+Route.resource('/teste', 'ProjectSubmissionController').apiOnly();

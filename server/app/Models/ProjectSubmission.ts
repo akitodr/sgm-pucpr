@@ -1,44 +1,74 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Campus from './Campus'
 import School from './School'
 import Course from './Course'
-import Teacher from './Teacher'
 
 export default class ProjectSubmission extends BaseModel {
+  public static table = 'project_submission'
+
   @column({ isPrimary: true })
   public id: number
 
-  // Belongs To
-  @belongsTo(() => Campus)
-  public campus: BelongsTo<typeof Campus>
+  @hasOne(() => Campus)
+  public campus: HasOne<typeof Campus>
 
-  @belongsTo(() => School)
-  public school: BelongsTo<typeof School>
+  @hasOne(() => School)
+  public schools: HasOne<typeof School>
 
-  @belongsTo(() => Course)
-  public course: BelongsTo<typeof Course>
-
-  // HasMany:
-
-  // Columns:
-  @column()
-  public estimated_qntd: number
+  @hasOne(() => Course)
+  public courses: HasOne<typeof Course>
 
   @column()
-  public workload_qntd: number
+  public campus_id: number
 
   @column()
-  public workload_justify: string
+  public schools_id: number
 
   @column()
-  public workdload_extraclass_qntd: number
+  public courses_id: number
 
   @column()
-  public workload_extraclass_justify: string
+  public students_amount: number
 
   @column()
-  public total_hours: number
+  public students_justification: string
+
+  @column()
+  public chc_amount: number
+
+  @column()
+  public chc_justification: string
+
+  @column()
+  public che_amount: number
+
+  @column()
+  public che_justification: string
+
+  @column()
+  public total: number
+
+  @column()
+  public teachers_id: JSON
+
+  @column()
+  public disciplines_id: JSON
+
+  @column()
+  public characteristics_justification: string
+
+  @column()
+  public challanges_justification: string
+
+  @column()
+  public strategies: JSON
+
+  @column()
+  public challanges: JSON
+
+  @column()
+  public activities: JSON
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
