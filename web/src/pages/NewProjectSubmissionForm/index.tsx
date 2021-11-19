@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaEllipsisH, FaPray, FaRockrms } from 'react-icons/fa';
 import { MdClear, MdDeleteForever, MdDone, MdEdit } from 'react-icons/md';
+import { useHistory } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -13,8 +14,9 @@ import {
   Table,
   Typography,
   Tooltip,
+  Modal
 } from 'antd';
-
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -24,9 +26,13 @@ import { Header, Container, FormContainer } from './styles';
 import SchoolService from '../../services/schools.service';
 import CampusService from '../../services/campus.service';
 import CoursesService from '../../services/courses.service';
+import projectsubmissionService from '../../services/projectsubmission.service';
+
 
 
 const NewProjectSubmissionForm: React.FC = () => {
+  const history = useHistory();
+
   interface Campus {
     id: number;
     name: string;
@@ -64,20 +70,15 @@ const NewProjectSubmissionForm: React.FC = () => {
   const [form] = Form.useForm();
   const { Option } = Select;
   const { TextArea } = Input;
+  const { confirm } = Modal;
 
   
-
+  const [sended, setSended] = useState<Boolean>();
   const [campuses, setCampuses] = useState<Campus[]>();
   const [schools, setSchools] = useState<School[]>();
   const [courses, setCourses] = useState<Course[]>();
   const [allCourses, setAllCourses] = useState<Course[]>();
-  const [showTeacherForm, setShowTeacherForm] = useState<boolean>(false);
-  const [showDisciplineForm, setShowDisciplineForm] = useState<boolean>(false);
-  const [chClass, setChClass] = useState<number>(0);
-  const [chExtraClass, setChExtraClass] = useState<number>(0);
-  const [totalHours, setTotalHours] = useState<number>(0);
   const [checkboxValue, setCheboxValue] = useState<boolean>(false);
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [keyState, addKeyState] = useState<number>(0);
   // challange states
   const [stateChallange, setChallangeState] = useState<boolean>(false);
@@ -167,7 +168,6 @@ const NewProjectSubmissionForm: React.FC = () => {
   function handleEdit(element: ValueOfTable, id: string){
     switch (id){
       case 'challange':{
-        console.log('achei');
         setChallageArray(challageArray.map((e) => {
           if (e !== element) return e;
           return { ...e, editing: true };
@@ -315,8 +315,48 @@ const NewProjectSubmissionForm: React.FC = () => {
     addKeyState(keyState+1);
   }
 
-  const onFinish = (values: object) => {
-    console.log(values);
+
+  function onFinish(values:Store) {
+    const sub = submitToDB(values);
+    confirm({
+      title: 'Deseja enviar esse projeto para Submissão?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Após confirmar, essa ação não poderá ser desfeita',
+      onOk() {
+        Modal.success({
+          content: 'Seu projeto foi enviado para submissão! \n Obrigado',
+        });
+        history.push('/projects/list');
+      },
+      onCancel() {},
+    });
+  }
+
+  const submitToDB = async (values: Store) => {
+    const tableJson = JSON.parse(JSON.stringify({ 'value': valuesStringTable }));
+    const teachersId = JSON.parse(JSON.stringify({ 'value': values.teachers_id }));
+    const diciplinesId = JSON.parse(JSON.stringify({ 'value': values.disciplines_id }));
+    try {
+      const res = await projectsubmissionService.create(
+        values.campus_id,
+        values.schools_id,
+        values.courses_id,
+        teachersId,
+        diciplinesId,
+        values.students_amount,
+        values.students_justification,
+        values.chc_amount,
+        values.chc_justification,
+        values.che_amount,
+        values.che_justification,
+        values.total,
+        values.characteristics_justification,
+        values.challanges_justification,
+        tableJson);
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
 
   return (
@@ -333,7 +373,9 @@ const NewProjectSubmissionForm: React.FC = () => {
       <Container>
         <FormContainer>
           <h2>ANEXO 1 - PROJETO NOVO</h2>
-          <p>Utilize este Anexo para propor um Projeto de Monitoria inédito.</p>
+          <p>
+            Utilize este Anexo para propor um Projeto de Monitoria inédito.
+          </p>
           <p>
             <span>1.VINCULAÇÃO DO PROJETO DE MONITORIA:</span>
           </p>
@@ -551,10 +593,12 @@ const NewProjectSubmissionForm: React.FC = () => {
               pelo projeto.
             </p>
             <p>
-              Lembre-se: na modalidade exclusivamente em sala de aula, não cabe
+              Lembre-se: na modalidade exclusivamente em sala de aula, 
+              não cabe
               atribuição de horas não letivas; na modalidade extraclasse, o
               orientador deverá obrigatoriamente ter em seu TACH 1 hora não
-              letiva para cada 8 horas semanais de monitoria extraclasse, a ser
+              letiva para cada 8 horas semanais de monitoria extraclasse, 
+              a ser
               confirmada pelo Decano/Diretor após aprovação do projeto.
             </p>
 
@@ -1038,10 +1082,12 @@ const NewProjectSubmissionForm: React.FC = () => {
                 setCheboxValue(e.target.checked)}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
-              quam nec eros cursus euismod. Donec molestie justo ac est commodo,
+              quam nec eros cursus euismod. Donec molestie justo 
+              ac est commodo,
               eu ultricies lorem mattis. Nulla quis neque rhoncus augue
               scelerisque pharetra. Curabitur porttitor imperdiet erat sed
-              finibus. Curabitur id nisi a turpis bibendum molestie ac at dolor.
+              finibus. Curabitur id nisi a turpis bibendum 
+              molestie ac at dolor.
             </Checkbox>
             <Button
               className="primary-button"

@@ -1,6 +1,6 @@
 import api from './api';
 
-const endPoint = '/projectsubmissions';
+const endPoint = '/teste';
 
 
 export default {
@@ -21,8 +21,6 @@ export default {
     characteristics_justification: string,
     challanges_justification: string,
     strategies: JSON,
-    challanges: JSON,
-    activities: JSON
   ) => api.post(endPoint, {
     campus_id,
     schools_id,
@@ -38,7 +36,6 @@ export default {
     total,
     characteristics_justification,
     challanges_justification,
-    strategies,
-    challanges,
-    activities })
+    strategies
+  }).catch((error) => { throw error; })
 };
